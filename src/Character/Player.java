@@ -18,6 +18,13 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = heyH;
 
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 32;
+        solidArea.height = 32;
+
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -120,6 +127,9 @@ public class Player extends Entity {
 
 
         }
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+
         spriteCounter++;
         if(spriteCounter > 5) {
             if(spriteNum == 1) {
@@ -130,6 +140,7 @@ public class Player extends Entity {
             }
             spriteCounter = 0;
         }
+
     }
     public void draw(Graphics2D g2) {
 

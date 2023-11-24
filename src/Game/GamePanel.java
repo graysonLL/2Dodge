@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import Background.TileManager;
 import Character.Player;
+import Objects.FlyingObject;
 
 public class GamePanel extends JPanel implements Runnable {
     final int orignalTileSize = 16;
@@ -19,12 +20,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    public CollisionChecker cChecker = new CollisionChecker(this);
     Player player = new Player(this,keyH);
     TileManager tileM = new TileManager(this);
 
     //FPS
     int FPS = 60;
 
+    private FlyingObject flyingObject;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
@@ -32,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        flyingObject = new FlyingObject();
     }
 
     public void startGameThread() {
@@ -59,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
             if(delta >= 1) {
                 update();
                 repaint();
+                flyingObject.update();
                 delta--;
                 drawCount++;
             }
@@ -81,6 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D)g;
         tileM.draw(g2);
         player.draw(g2);
+        flyingObject.draw(g2);
         g2.dispose();
     }
 }
