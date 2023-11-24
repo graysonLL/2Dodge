@@ -24,8 +24,8 @@ public class Player extends Entity {
 
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        x = 300;
+        y = 300;
         speed = 4;
         direction = "down";
     }
@@ -34,13 +34,25 @@ public class Player extends Entity {
 
         try {
             up_idle1 = ImageIO.read(getClass().getResourceAsStream("/Player/up_idle1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/Player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/Player/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/Player/boy_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/Player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/Player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/Player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/Player/boy_right_2.png"));
+            up_idle2 = ImageIO.read(getClass().getResourceAsStream("/Player/up_idle2.png"));
+            up_move1 = ImageIO.read(getClass().getResourceAsStream("/Player/up_move1.png"));
+            up_move2 = ImageIO.read(getClass().getResourceAsStream("/Player/up_move2.png"));
+
+            upright_idle1 = ImageIO.read(getClass().getResourceAsStream("/Player/upright_move1.png"));
+            upright_move1 = ImageIO.read(getClass().getResourceAsStream("/Player/upright_move1.png"));
+            upright_move2 = ImageIO.read(getClass().getResourceAsStream("/Player/upright_move2.png"));
+
+            down_idle1 = ImageIO.read(getClass().getResourceAsStream("/Player/down_idle1.png"));
+            down_move1 = ImageIO.read(getClass().getResourceAsStream("/Player/down_move1.png"));
+            down_move2 = ImageIO.read(getClass().getResourceAsStream("/Player/down_move2.png"));
+
+            left_idle1 = ImageIO.read(getClass().getResourceAsStream("/Player/left_idle1.png"));
+            left_move1 = ImageIO.read(getClass().getResourceAsStream("/Player/left_move1.png"));
+            left_move2 = ImageIO.read(getClass().getResourceAsStream("/Player/left_move2.png"));
+
+            right_idle1 = ImageIO.read(getClass().getResourceAsStream("/Player/right_idle1.png"));
+            right_move1 = ImageIO.read(getClass().getResourceAsStream("/Player/right_move1.png"));
+            right_move2 = ImageIO.read(getClass().getResourceAsStream("/Player/right_move2.png"));
 
         }catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +61,12 @@ public class Player extends Entity {
 
     public void update() {
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
-            if(keyH.upPressed == true) {
+
+            if(keyH.upPressed == true && keyH.rightPressed == true) {
+                direction = "up_right";
+                y -= speed;
+            }
+            else if(keyH.upPressed == true) {
                 direction = "up";
                 y -= speed;
             }
@@ -83,39 +100,75 @@ public class Player extends Entity {
         BufferedImage image = null;
 
         switch(direction) {
-            case "up":
+
+            case "up_right":
+                System.out.print(direction);
                 if(spriteNum == 1) {
-                    image = up1;
+                    image = upright_move1;
                 }
                 if(spriteNum == 2) {
-                    image = up2;
+                    image = upright_move2;
+                }
+                break;
+
+            case "up":
+                if(keyH.upPressed == true) {
+                    if(spriteNum == 1) {
+                        image = up_move1;
+                    }
+                    if(spriteNum == 2) {
+                        image = up_move2;
+                    }
+                }
+                else {
+                    if(spriteNum == 1) {
+                        image = up_idle1;
+                    }
+                    if(spriteNum == 2) {
+                        image = up_idle2;
+                    }
                 }
                 break;
 
             case "down":
-                if(spriteNum == 1) {
-                    image = down1;
+                if(keyH.downPressed == true) {
+                    if(spriteNum == 1) {
+                        image = down_move1;
+                    }
+                    if(spriteNum == 2) {
+                        image = down_move2;
+                    }
                 }
-                if(spriteNum == 2) {
-                    image = down2;
+                else {
+                    image = down_idle1;
                 }
                 break;
 
             case "left":
-                if(spriteNum == 1) {
-                    image = left1;
+                if(keyH.leftPressed == true) {
+                    if(spriteNum == 1) {
+                        image = left_move1;
+                    }
+                    if(spriteNum == 2) {
+                        image = left_move2;
+                    }
                 }
-                if(spriteNum == 2) {
-                    image = left2;
+                else {
+                    image = left_idle1;
                 }
                 break;
 
             case "right":
-                if(spriteNum == 1) {
-                    image = right1;
+                if(keyH.rightPressed == true) {
+                    if(spriteNum == 1) {
+                        image = right_move1;
+                    }
+                    if(spriteNum == 2) {
+                        image = right_move2;
+                    }
                 }
-                if(spriteNum == 2) {
-                    image = right2;
+                else {
+                    image = right_idle1;
                 }
                 break;
         }
