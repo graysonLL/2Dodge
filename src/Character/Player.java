@@ -31,8 +31,8 @@ public class Player extends Entity {
 
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        x = 340;
+        y = 250;
         speed = 4;
         direction = "down";
     }
@@ -128,7 +128,6 @@ public class Player extends Entity {
 
         }
         collisionOn = false;
-        gp.cChecker.checkTile(this);
 
         spriteCounter++;
         if(spriteCounter > 5) {
@@ -140,7 +139,6 @@ public class Player extends Entity {
             }
             spriteCounter = 0;
         }
-
     }
     public void draw(Graphics2D g2) {
 
@@ -305,5 +303,12 @@ public class Player extends Entity {
                 break;
         }
         g2.drawImage(image,x,y,gp.tileSize,gp.tileSize,null);
+    }
+    public int getCurrentX() {
+        return x;
+    }
+
+    public int getCurrentY() {
+        return y;
     }
 }

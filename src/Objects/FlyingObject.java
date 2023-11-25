@@ -1,22 +1,35 @@
 package Objects;
 
+import Background.Tile;
+
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.io.IOException;
 
-public class FlyingObject {
+public abstract class FlyingObject extends Items {
     private static final int tileSize = 16;
     private static final int maxScreenCol = 48;
     private static final int maxScreenRow = 36;
     private static final int screenWidth = tileSize * maxScreenCol;
     private static final int screenHeight = tileSize * maxScreenRow;
 
-    private int x, y;
+    public int x, y;
     private int speed; // Speed in the X direction
     private int directionX, directionY; // Direction in the X axis
     private Random random;
 
+
+    private int characterX;
+    private int characterY;
+    private int characterWidth;
+    private int characterHeight;
+
+
     public FlyingObject() {
+
         Random random = new Random();
         if (random.nextBoolean()) {
             x = 0;
@@ -39,6 +52,19 @@ public class FlyingObject {
         x += speed * directionX;
         y += speed * directionY;
 
+
+        // Collision detection with the character
+        if (x < characterX + characterWidth &&
+                x + tileSize > characterX &&
+                y < characterY + characterHeight &&
+                y + tileSize > characterY) {
+            // Collision occurred, handle game over or any other actions
+            System.out.println("Game Over - Collision Detected!");
+            // You might trigger a game over action here
+            // For example: gameEnded = true;
+            System.out.print(x + characterX);
+        }
+
         if (x < 0 || x > screenWidth - tileSize || y < 0 || y > screenHeight - tileSize) {
             Random random = new Random();
             if (random.nextBoolean()) {
@@ -57,9 +83,13 @@ public class FlyingObject {
             }
         }
     }
+    public abstract void draw(Graphics g);
 
-    public void draw(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillRect(x, y, tileSize, tileSize);
+    public int getCurrentX() {
+        return x;
+    }
+
+    public int getCurrentY() {
+        return y;
     }
 }
