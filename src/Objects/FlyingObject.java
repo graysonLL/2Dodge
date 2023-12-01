@@ -21,38 +21,23 @@ public abstract class FlyingObject extends Items {
     private int directionX, directionY; // Direction in the X axis
 
     public FlyingObject() {
-        spawnRandom();
-        speed = 6;
-    }
 
-    private void spawnRandom() {
         Random random = new Random();
-        int spawnType = random.nextInt(3); // 0, 1, or 2
-
-        switch (spawnType) {
-            case 0: // Vertical spawn
-                x = random.nextInt(700 - 68) + 68; // Random x between 68 and 700
-                y = random.nextBoolean() ? 0 : screenHeight - tileSize;
-                directionX = random.nextBoolean() ? 1 : -1;
-                directionY = 0;
-                break;
-
-
-
-            case 1: // Horizontal spawn
-                x = random.nextBoolean() ? 0 : screenWidth - tileSize;
-                y = random.nextBoolean() ? random.nextInt(screenHeight - 200) : screenHeight - 100;
-                directionX = 0;
-                directionY = random.nextBoolean() ? 1 : -1;
-                break;
-
-            case 2: // Diagonal spawn
-                x = random.nextBoolean() ? random.nextInt(screenWidth) : screenWidth;
-                y = random.nextBoolean() ? random.nextInt(screenHeight) : screenHeight;
-                directionX = random.nextBoolean() ? 1 : -1;
-                directionY = random.nextBoolean() ? 1 : -1;
-                break;
+        if (random.nextBoolean()) {
+            x = 0;
+            directionX = 1;
+        } else {
+            x = screenWidth - tileSize;
+            directionX = -1;
         }
+        if (random.nextBoolean()) {
+            y = 0;
+            directionY = 1;
+        } else {
+            y = screenHeight - tileSize;
+            directionY = -1;
+        }
+        speed = 6;
     }
 
     public void update() {
@@ -73,5 +58,22 @@ public abstract class FlyingObject extends Items {
     public int getCurrentY() {
         return y;
     }
-}
 
+    private void spawnRandom() {
+        Random random = new Random();
+        if (random.nextBoolean()) {
+            x = 0;
+            directionX = 1;
+        } else {
+            x = screenWidth - tileSize;
+            directionX = -1;
+        }
+        if (random.nextBoolean()) {
+            y = 0;
+            directionY = 1;
+        } else {
+            y = screenHeight - tileSize;
+            directionY = -1;
+        }
+    }
+}
