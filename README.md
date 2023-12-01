@@ -7,4 +7,5 @@ TODO:
 -add sound effects  
 -add health restorer(food, sleep, water?)  
 -change background of main game  
--change image of F and A grades(make A to a different color, remove border)  
+-change image of F and A grades(make A to a different color, remove border)   
+-change to have an array of up to 5 grades - with this also change the collision make it a method in the class
