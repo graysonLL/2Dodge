@@ -19,8 +19,11 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
-    private int score = 0;
+    private Score score = new Score();
 
+    private int fGradeCount = 0;
+    private boolean addedFGrade = false;
+    private F_Grade[] fGrades;
 
     public boolean gameOver = false;
 
@@ -38,6 +41,8 @@ public class GamePanel extends JPanel implements Runnable {
     private FlyingObject flyingObject;
     private FlyingObject flyingObject2;
 
+
+
     private Canvas canvas;  // New Canvas member variable
 
     public GamePanel() {
@@ -54,6 +59,10 @@ public class GamePanel extends JPanel implements Runnable {
         canvas.setFocusable(true);
         this.add(canvas);
 
+        fGrades = new F_Grade[5];
+        for (int i = 0; i < fGrades.length; i++) {
+            fGrades[i] = new F_Grade();
+        }
 
         flyingObject2 = new F_Grade();
         flyingObject = new F_Grade();
@@ -89,6 +98,9 @@ public class GamePanel extends JPanel implements Runnable {
                 repaint();
                 delta--;
                 drawCount++;
+                for (F_Grade fGrade : fGrades) {
+                    fGrade.update();
+                }
                 flyingObject.update();
                 flyingObject2.update();
             }
@@ -99,6 +111,8 @@ public class GamePanel extends JPanel implements Runnable {
                 drawCount = 0;
                 timer = 0;
             }
+
+
             g.dispose();
             bufferStrategy.show();
         }
@@ -110,28 +124,44 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void checkCollisions() {
-        if (player.getCurrentY() - flyingObject.getCurrentY() <= 20 &&
-                player.getCurrentY() - flyingObject.getCurrentY() >= -20 &&
-                player.getCurrentX() - flyingObject.getCurrentX() <= 20 &&
-                player.getCurrentX() - flyingObject.getCurrentX() >= -20) {
-            gameOver = true;
+        if (!flyingObject.hasCollided() && player.getCurrentY() - flyingObject.getCurrentY() <= 25 &&
+                player.getCurrentY() - flyingObject.getCurrentY() >= -25 &&
+                player.getCurrentX() - flyingObject.getCurrentX() <= 25 &&
+                player.getCurrentX() - flyingObject.getCurrentX() >= -25) {
+                player.removeHitPoint();
+                flyingObject.setCollided();
+                flyingObject.spawnRandom();
+                flyingObject.resetCollisionFlag();
         }
 
-        if (player.getCurrentY() - flyingObject2.getCurrentY() <= 20 &&
-                player.getCurrentY() - flyingObject2.getCurrentY() >= -20 &&
-                player.getCurrentX() - flyingObject2.getCurrentX() <= 20 &&
-                player.getCurrentX() - flyingObject2.getCurrentX() >= -20) {
-            gameOver = true;
+        else if (!flyingObject2.hasCollided() && player.getCurrentY() - flyingObject2.getCurrentY() <= 25 &&
+                player.getCurrentY() - flyingObject2.getCurrentY() >= -25 &&
+                player.getCurrentX() - flyingObject2.getCurrentX() <= 25 &&
+                player.getCurrentX() - flyingObject2.getCurrentX() >= -25) {
+                player.removeHitPoint();
+                flyingObject2.setCollided();
+                flyingObject2.spawnRandom();
+                flyingObject2.resetCollisionFlag();
         }
 
         if (player.getCurrentY() - randomBox.getCurrentY() <= 30 &&
                 player.getCurrentY() - randomBox.getCurrentY() >= -30 &&
                 player.getCurrentX() - randomBox.getCurrentX() <= 30 &&
                 player.getCurrentX() - randomBox.getCurrentX() >= -30) {
-            score += 1;
-            System.out.println(score);
-            randomBox.respawnBox();
+                score.addPoint();
+                System.out.println(score.totalPoints);
+                randomBox.respawnBox();
+                if(fGradeCount < 5 && score.totalPoints % 5 == 0 && addedFGrade == false) {
+                    addedFGrade = true;
+                    fGrades[fGradeCount] = new F_Grade();
+                    fGradeCount++;
+                    repaint();
+                }
         }
+        if(player.hitPoints==0) {
+            gameOver = true;
+        }
+
     }
 
     public void paintComponent(Graphics g) {
@@ -140,9 +170,16 @@ public class GamePanel extends JPanel implements Runnable {
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, screenWidth, screenHeight);
         tileM.draw(g2);
+        score.displayScore(g2);
+        player.displayLife(g2);
         player.draw(g2);
         flyingObject.draw(g2);
         flyingObject2.draw(g2);
+//        for (F_Grade fGrade : fGrades) {
+//            if (fGrade != null) {
+//                fGrade.draw(g2);
+//            }
+//        }
         randomBox.draw(g2);
         g2.dispose();
     }

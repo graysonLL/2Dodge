@@ -1,18 +1,19 @@
 package Objects;
 
 import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
 
-public class PickUpObject extends Items {
+
+public class PickUpObject extends Rectangle {
+    public BufferedImage image;
     private int x; // x-coordinate of the box
     private int y; // y-coordinate of the box
     private int boxSize = 30; // Adjust the size of the box as needed
     private int screenWidth;
     private int screenHeight;
-    private BufferedImage image;
 
     public void respawnBox() {
         Random random = new Random();

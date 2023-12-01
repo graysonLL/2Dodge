@@ -1,20 +1,16 @@
 package Objects;
 
-import Background.Tile;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.Random;
-import java.io.IOException;
 
-public abstract class FlyingObject extends Items {
+public abstract class FlyingObject extends Rectangle {
     private static final int tileSize = 16;
     private static final int maxScreenCol = 48;
     private static final int maxScreenRow = 36;
     private static final int screenWidth = tileSize * maxScreenCol;
     private static final int screenHeight = tileSize * maxScreenRow;
+    private boolean hasCollided;
+
 
     public int x, y;
     private int speed; // Speed in the X direction
@@ -37,7 +33,7 @@ public abstract class FlyingObject extends Items {
             y = screenHeight - tileSize;
             directionY = -1;
         }
-        speed = 6;
+        speed = 5;
     }
 
     public void update() {
@@ -59,7 +55,7 @@ public abstract class FlyingObject extends Items {
         return y;
     }
 
-    private void spawnRandom() {
+    public void spawnRandom() {
         Random random = new Random();
         if (random.nextBoolean()) {
             x = 0;
@@ -75,5 +71,17 @@ public abstract class FlyingObject extends Items {
             y = screenHeight - tileSize;
             directionY = -1;
         }
+    }
+
+    public void resetCollisionFlag() {
+        hasCollided = false;
+    }
+
+    public boolean hasCollided() {
+        return hasCollided;
+    }
+
+    public void setCollided() {
+        hasCollided = true;
     }
 }

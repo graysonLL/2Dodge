@@ -10,9 +10,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-
+    private BufferedImage heartImage;
     GamePanel gp;
     KeyHandler keyH;
+
+    public int hitPoints = 3;
 
     public Player(GamePanel gp,KeyHandler heyH) {
         this.gp = gp;
@@ -329,5 +331,27 @@ public class Player extends Entity {
         }
     }
 
+    public void displayLife(Graphics2D g2) {
+        int heartSize = 30; // Adjust the size of the hearts as needed
+        int spacing = 10; // Adjust the spacing between hearts as needed
+        int leftMargin = 10;
+        try {
+            heartImage = ImageIO.read(getClass().getResourceAsStream("/Items/heart.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int x;
+        for (x = 0; x < hitPoints; x++) {
+            int heartX = x * (heartSize + spacing) + leftMargin; // Adjusted to include left margin
+            int heartY = 10; // Fixed vertical position at the top
+            g2.drawImage(heartImage, heartX, heartY, heartSize, heartSize, null);
+        }
+    }
 
+
+
+
+    public void removeHitPoint() {
+        hitPoints-=1;
+    }
 }
