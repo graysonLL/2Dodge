@@ -1,14 +1,14 @@
 package Game;
 
 import java.awt.*;
-
+import java.awt.image.BufferStrategy;
 import javax.swing.JPanel;
-
 import Background.TileManager;
 import Character.Player;
 import Objects.FlyingObject;
-import Objects.Grade_5;
+import Objects.F_Grade;
 import Objects.PickUpObject;
+
 
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
     private int score = 0;
+
 
     public boolean gameOver = false;
 
@@ -37,17 +38,29 @@ public class GamePanel extends JPanel implements Runnable {
     private FlyingObject flyingObject;
     private FlyingObject flyingObject2;
 
+    private Canvas canvas;  // New Canvas member variable
+
     public GamePanel() {
+        this.setLayout(null); // Set layout to null
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
-        this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
-        flyingObject2 = new Grade_5();
-        flyingObject = new Grade_5();
+        this.requestFocus();
+
+        // Create a Canvas and add it to the JPanel
+        canvas = new Canvas();
+        canvas.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        canvas.setFocusable(true);
+        this.add(canvas);
+
+
+        flyingObject2 = new F_Grade();
+        flyingObject = new F_Grade();
     }
 
     public void startGameThread() {
+        canvas.createBufferStrategy(2);
         gameThread =  new Thread(this);
         gameThread.start();
     }
@@ -63,6 +76,8 @@ public class GamePanel extends JPanel implements Runnable {
         int drawCount = 0;
 
         while(gameThread != null && gameOver == false) {
+            BufferStrategy bufferStrategy = canvas.getBufferStrategy();
+            Graphics g = bufferStrategy.getDrawGraphics();
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
@@ -77,24 +92,15 @@ public class GamePanel extends JPanel implements Runnable {
                 flyingObject.update();
                 flyingObject2.update();
             }
-            if(player.getCurrentY()-flyingObject.getCurrentY() <= 20 && player.getCurrentY()-flyingObject.getCurrentY() >= -20 && player.getCurrentX()-flyingObject.getCurrentX() <= 20 && player.getCurrentX()-flyingObject.getCurrentX() >= -20) {
-                System.out.println("you  Lose 1");
-                gameOver = true;
-            }
-            if(player.getCurrentY()-flyingObject2.getCurrentY() <= 20 && player.getCurrentY()-flyingObject2.getCurrentY() >= -20 && player.getCurrentX()-flyingObject2.getCurrentX() <= 20 && player.getCurrentX()-flyingObject2.getCurrentX() >= -20) {
-                System.out.println("you Lose 2");
-            }
-            if(player.getCurrentY()-randomBox.getCurrentY() <= 30 && player.getCurrentY()-randomBox.getCurrentY() >= -30 && player.getCurrentX()-randomBox.getCurrentX() <= 30 && player.getCurrentX()-randomBox.getCurrentX() >= -30) {
-                score+=1;
-                System.out.println(score);
-                randomBox = new PickUpObject(screenWidth, screenHeight);
-            }
+//            checkCollisions();
 
-                if(timer >= 1000000000) {
+            if(timer >= 1000000000) {
                 System.out.println("FPS:" + drawCount);
                 drawCount = 0;
                 timer = 0;
             }
+            g.dispose();
+            bufferStrategy.show();
         }
 
     }
@@ -103,9 +109,36 @@ public class GamePanel extends JPanel implements Runnable {
         player.update();
     }
 
+    private void checkCollisions() {
+        if (player.getCurrentY() - flyingObject.getCurrentY() <= 20 &&
+                player.getCurrentY() - flyingObject.getCurrentY() >= -20 &&
+                player.getCurrentX() - flyingObject.getCurrentX() <= 20 &&
+                player.getCurrentX() - flyingObject.getCurrentX() >= -20) {
+            gameOver = true;
+        }
+
+        if (player.getCurrentY() - flyingObject2.getCurrentY() <= 20 &&
+                player.getCurrentY() - flyingObject2.getCurrentY() >= -20 &&
+                player.getCurrentX() - flyingObject2.getCurrentX() <= 20 &&
+                player.getCurrentX() - flyingObject2.getCurrentX() >= -20) {
+            gameOver = true;
+        }
+
+        if (player.getCurrentY() - randomBox.getCurrentY() <= 30 &&
+                player.getCurrentY() - randomBox.getCurrentY() >= -30 &&
+                player.getCurrentX() - randomBox.getCurrentX() <= 30 &&
+                player.getCurrentX() - randomBox.getCurrentX() >= -30) {
+            score += 1;
+            System.out.println(score);
+            randomBox.respawnBox();
+        }
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, screenWidth, screenHeight);
         tileM.draw(g2);
         player.draw(g2);
         flyingObject.draw(g2);

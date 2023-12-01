@@ -4,9 +4,9 @@ import Game.GamePanel;
 import Game.KeyHandler;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOError;
 import java.io.IOException;
 
 public class Player extends Entity {
@@ -139,6 +139,8 @@ public class Player extends Entity {
             }
             spriteCounter = 0;
         }
+
+        outOfBoundsStopper(0, 0, gp.screenWidth - solidArea.width, gp.screenHeight - solidArea.height);
     }
     public void draw(Graphics2D g2) {
 
@@ -311,4 +313,21 @@ public class Player extends Entity {
     public int getCurrentY() {
         return y;
     }
+
+    public void outOfBoundsStopper(int minX, int minY, int maxX, int maxY) {
+        // Ensure the player stays within the bounds
+        if (getCurrentX() < minX) {
+            x = minX;
+        } else if (getCurrentX() > maxX) {
+            x = maxX;
+        }
+
+        if (getCurrentY() < minY) {
+            y = minY;
+        } else if (getCurrentY() > maxY) {
+            y = maxY;
+        }
+    }
+
+
 }
