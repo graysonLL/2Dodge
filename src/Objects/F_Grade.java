@@ -17,6 +17,6 @@ public class F_Grade extends FlyingObject {
     }
 
     public void draw(Graphics2D g2) {
-        g2.drawImage(image, x, y, 32, 32, null);
+        g2.drawImage(image, x, y, 40, 40, null);
     }
 }

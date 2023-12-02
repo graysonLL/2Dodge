@@ -13,7 +13,7 @@ public abstract class FlyingObject extends Rectangle {
 
 
     public int x, y;
-    private int speed; // Speed in the X direction
+    public int speed; // Speed in the X direction
     private int directionX, directionY; // Direction in the X axis
 
     public FlyingObject() {
@@ -33,7 +33,7 @@ public abstract class FlyingObject extends Rectangle {
             y = screenHeight - tileSize;
             directionY = -1;
         }
-        speed = 5;
+        speed = 3;
     }
 
     public void update() {

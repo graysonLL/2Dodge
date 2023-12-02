@@ -4,51 +4,64 @@ import Game.GamePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StartMenu extends JPanel {
-    JButton startButton;
-    JPanel cards;
+    private JPanel cards;
+    private ImageIcon scaledBackgroundImage;
 
     public StartMenu(JPanel cards, GamePanel gamePanel) {
         this.cards = cards;
         setLayout(null);
-        setBackground(Color.BLACK);
 
-        JPanel titleNamePanel = new JPanel();
-        titleNamePanel.setBounds(100, 100, 600, 150);
-        titleNamePanel.setBackground(Color.green);
+        ImageIcon originalBackgroundImage = new ImageIcon(getClass().getResource("/Background/BG_Project2.png"));
+        Image originalImage = originalBackgroundImage.getImage();
 
-        JLabel titleNameLabel = new JLabel("2Dodge");
-        titleNameLabel.setForeground(Color.white);
-        titleNameLabel.setFont(new Font("Sans serif", Font.BOLD, 30));
+        JLabel backgroundLabel = new JLabel(originalBackgroundImage);
+        backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
+        add(backgroundLabel);
 
-        titleNamePanel.add(titleNameLabel);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int scaledWidth = getWidth();
+                int scaledHeight = getHeight();
 
-        JPanel startButtonPanel = new JPanel();
-        startButtonPanel.setBounds(300, 400, 200, 100);
-        startButtonPanel.setBackground(Color.blue);
+                Image scaledImage = originalImage.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+                scaledBackgroundImage = new ImageIcon(scaledImage);
 
-        startButton = new JButton("START");
-        startButton.setForeground(Color.white);
-        startButton.setBackground(Color.black);
+                backgroundLabel.setIcon(scaledBackgroundImage);
+                backgroundLabel.setBounds(0, 0, scaledWidth, scaledHeight);
+            }
+        });
 
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+
+        ImageIcon startButtonImage = new ImageIcon(getClass().getResource("/Background/Start.png"));
+
+
+        JLabel startButtonLabel = new JLabel(startButtonImage);
+        startButtonLabel.setBounds(230, 400, 300, 150);
+
+        startButtonLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
                 CardLayout cl = (CardLayout) (cards.getLayout());
                 cl.show(cards, "GamePanel");
 
                 gamePanel.startGameThread();
-
                 gamePanel.requestFocusInWindow();
             }
         });
 
-        startButtonPanel.add(startButton);
+        add(startButtonLabel);
+    }
 
-        add(titleNamePanel);
-        add(startButtonPanel);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
     }
 }
-
