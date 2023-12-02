@@ -220,6 +220,8 @@ public class GamePanel extends JPanel implements Runnable {
         // Reset score
         score.reset();
 
+        flyingObject.speed = 3;
+        flyingObject2.speed = 3;
         // Reset other game objects if needed
         // ...
 

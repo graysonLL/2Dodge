@@ -21,4 +21,8 @@ public class GradeA extends PickUpObject {
         respawnBox();
     }
 
+    public void draw(Graphics2D g2) {
+        g2.drawImage(image, x, y, 35, 40, null);
+    }
+
 }
