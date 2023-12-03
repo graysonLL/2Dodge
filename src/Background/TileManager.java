@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 import java.util.Random;
 
 public class TileManager {
@@ -22,7 +21,7 @@ public class TileManager {
         tile = new Tile[10];
         mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
 
-        random = getRandomNumber(1,3);
+        random = getRandomNumber(1,4);
 
 
         getTileImage();
@@ -35,6 +34,9 @@ public class TileManager {
         }
         if(random == 3) {
             loadMap("/Maps/map03.txt");
+        }
+        if(random == 4) {
+            loadMap("/Maps/map04.txt");
         }
 
 
@@ -53,7 +55,7 @@ public class TileManager {
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/earth.png"));
 
             tile[3] = new Tile();
-            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/tree.png"));
+            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/water.png"));
 
             tile[4] = new Tile();
             tile[4].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/sand.png"));
@@ -118,7 +120,7 @@ public class TileManager {
     }
 
     public void resetMap() {
-        random = getRandomNumber(1, 3);
+        random = getRandomNumber(1, 4);
         getTileImage();
 
         if (random == 1) {
@@ -127,6 +129,8 @@ public class TileManager {
             loadMap("/Maps/map02.txt");
         } else if (random == 3) {
             loadMap("/Maps/map03.txt");
+        } else if (random == 4) {
+            loadMap("/Maps/map04.txt");
         }
 
         System.out.println("random: " + random);
