@@ -14,6 +14,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
     final int scale = 3;
 
+    private int foodNum = 1;
+
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
@@ -145,20 +147,20 @@ public class GamePanel extends JPanel implements Runnable {
                 player.getCurrentY() - flyingObject.getCurrentY() >= -25 &&
                 player.getCurrentX() - flyingObject.getCurrentX() <= 25 &&
                 player.getCurrentX() - flyingObject.getCurrentX() >= -25) {
-                player.removeHitPoint();
-                flyingObject.setCollided();
-                flyingObject.spawnRandom();
-                flyingObject.resetCollisionFlag();
+            player.removeHitPoint();
+            flyingObject.setCollided();
+            flyingObject.spawnRandom();
+            flyingObject.resetCollisionFlag();
         }
 
         else if (!flyingObject2.hasCollided() && player.getCurrentY() - flyingObject2.getCurrentY() <= 25 &&
                 player.getCurrentY() - flyingObject2.getCurrentY() >= -25 &&
                 player.getCurrentX() - flyingObject2.getCurrentX() <= 25 &&
                 player.getCurrentX() - flyingObject2.getCurrentX() >= -25) {
-                player.removeHitPoint();
-                flyingObject2.setCollided();
-                flyingObject2.spawnRandom();
-                flyingObject2.resetCollisionFlag();
+            player.removeHitPoint();
+            flyingObject2.setCollided();
+            flyingObject2.spawnRandom();
+            flyingObject2.resetCollisionFlag();
         }
 
         if (gradeA.checkCollision(player.getCurrentY(),player.getCurrentX())) {
@@ -176,24 +178,36 @@ public class GamePanel extends JPanel implements Runnable {
                 flyingObject2.speed += 1;
             }
         }
-        if (taco.checkCollision(player.getCurrentY(),player.getCurrentX())) {
-            taco.respawnBox();
-            if(player.foodEaten < 3) {
-                player.foodEaten++;
+
+        if(foodNum == 1) {
+            if (taco.checkCollision(player.getCurrentY(),player.getCurrentX())) {
+                taco.respawnBox();
+                if(player.foodEaten < 3) {
+                    player.foodEaten++;
+                }
+                foodNum = 2;
             }
         }
-        if (pizza.checkCollision(player.getCurrentY(),player.getCurrentX())) {
-            pizza.respawnBox();
-            if(player.foodEaten < 3) {
-                player.foodEaten++;
+
+        if(foodNum == 2) {
+            if (pizza.checkCollision(player.getCurrentY(),player.getCurrentX())) {
+                pizza.respawnBox();
+                if(player.foodEaten < 3) {
+                    player.foodEaten++;
+                }
+                foodNum = 3;
             }
         }
-        if (bread.checkCollision(player.getCurrentY(),player.getCurrentX())) {
-            bread.respawnBox();
-            if(player.foodEaten < 3) {
-                player.foodEaten++;
+        if(foodNum == 3) {
+            if (bread.checkCollision(player.getCurrentY(),player.getCurrentX())) {
+                bread.respawnBox();
+                if(player.foodEaten < 3) {
+                    player.foodEaten++;
+                }
+                foodNum = 1;
             }
         }
+
         if (sleep.checkCollision(player.getCurrentY(),player.getCurrentX())) {
             sleep.respawnBox();
             if(player.sleepMeter < 5) {
@@ -222,11 +236,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         flyingObject.speed = 3;
         flyingObject2.speed = 3;
+
+        tileM.resetMap();
         // Reset other game objects if needed
         // ...
 
         // Ensure that game-over flag is set to false
         gameOver = false;
+
         startGameThread();
     }
 
@@ -243,9 +260,17 @@ public class GamePanel extends JPanel implements Runnable {
         flyingObject.draw(g2);
         flyingObject2.draw(g2);
         gradeA.draw(g2);
-        taco.draw(g2);
-        bread.draw(g2);
-        pizza.draw(g2);
+
+        if(foodNum == 1) {
+            taco.draw(g2);
+        }
+        if(foodNum == 2) {
+            pizza.draw(g2);
+        }
+        if(foodNum == 3) {
+            bread.draw(g2);
+        }
+
         sleep.draw(g2);
         player.displayEaten(g2);
 
