@@ -9,19 +9,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
+import java.util.Random;
 
 public class TileManager {
     GamePanel gp;
     Tile[] tile;
     public int mapTileNum[][];
+    private int random;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10];
         mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
 
+        random = getRandomNumber(1,3);
+
+
         getTileImage();
-        loadMap("/Maps/map01.txts");
+
+        if(random == 1) {
+            loadMap("/Maps/map01.txt");
+        }
+        if(random == 2) {
+            loadMap("/Maps/map02.txt");
+        }
+        if(random == 3) {
+            loadMap("/Maps/map03.txt");
+        }
+
+
+        System.out.println("random: "+random);
     }
 
     public void getTileImage() {
@@ -30,10 +47,16 @@ public class TileManager {
             tile[0].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/grass.png"));
 
             tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/wall.png"));
+            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/grass.png"));
 
             tile[2] = new Tile();
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/water.png"));
+            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/earth.png"));
+
+            tile[3] = new Tile();
+            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/tree.png"));
+
+            tile[4] = new Tile();
+            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/sand.png"));
 
         }catch (IOException e) {
             e.printStackTrace();
@@ -87,5 +110,25 @@ public class TileManager {
                 y += gp.tileSize;
             }
         }
+    }
+
+    private static int getRandomNumber(int min, int max) {
+        Random random = new Random();
+        return random.nextInt((max - min) + 1) + min;
+    }
+
+    public void resetMap() {
+        random = getRandomNumber(1, 3);
+        getTileImage();
+
+        if (random == 1) {
+            loadMap("/Maps/map01.txt");
+        } else if (random == 2) {
+            loadMap("/Maps/map02.txt");
+        } else if (random == 3) {
+            loadMap("/Maps/map03.txt");
+        }
+
+        System.out.println("random: " + random);
     }
 }
