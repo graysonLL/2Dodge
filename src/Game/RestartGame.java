@@ -7,6 +7,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.awt.Font;
+import java.awt.Color;
+import Game.Score;
 
 public class RestartGame {
     private BufferedImage restartImage;
@@ -49,10 +52,20 @@ public class RestartGame {
         });
     }
 
-    public void displayRestartWindow(Graphics2D g2) {
+    public void displayRestartWindow(Graphics2D g2, int highScore) {
         // Draw the restart button
         g2.drawImage(restartImage, restartButtonBounds.x, restartButtonBounds.y, restartButtonBounds.width, restartButtonBounds.height, null);
 
         g2.drawImage(gameOverImage, restartButtonBounds.x-31, restartButtonBounds.y-200, restartButtonBounds.width+100, restartButtonBounds.height+100, null);
+
+
+        Font font = new Font("Arial", Font.BOLD, 30);
+        g2.setFont(font);
+        g2.setColor(Color.WHITE);
+        String highScoreText = "High Score: " + highScore;
+        int textWidth = g2.getFontMetrics().stringWidth(highScoreText);
+        int textX = (gamePanel.screenWidth - textWidth) / 2;
+        int textY = restartButtonBounds.y + restartButtonBounds.height + 50; // Adjust the vertical position
+        g2.drawString(highScoreText, textX, textY);
     }
 }

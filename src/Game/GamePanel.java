@@ -230,7 +230,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Reset player state
         player.reset();
-
         // Reset score
         score.reset();
 
@@ -275,7 +274,10 @@ public class GamePanel extends JPanel implements Runnable {
         player.displayEaten(g2);
 
         if (gameOver) {
-            restartGameWindow.displayRestartWindow(g2);
+            if(score.totalPoints > score.highScore) {
+                score.highScore = score.totalPoints;
+            }
+            restartGameWindow.displayRestartWindow(g2,score.highScore);
         }
 
         g2.dispose();

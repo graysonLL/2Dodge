@@ -10,6 +10,7 @@ public class Score {
     private BufferedImage[] numberArray;
     private final int totalImages = 10;
     BufferedImage[] scoreImages;
+    public int highScore = 0;
 
     public Score() {
         loadNumberImages();
