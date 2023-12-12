@@ -58,14 +58,23 @@ public class RestartGame {
 
         g2.drawImage(gameOverImage, restartButtonBounds.x-31, restartButtonBounds.y-200, restartButtonBounds.width+100, restartButtonBounds.height+100, null);
 
-
+        // Draw the high score with a black outline
         Font font = new Font("Arial", Font.BOLD, 30);
         g2.setFont(font);
-        g2.setColor(Color.WHITE);
         String highScoreText = "High Score: " + highScore;
         int textWidth = g2.getFontMetrics().stringWidth(highScoreText);
         int textX = (gamePanel.screenWidth - textWidth) / 2;
         int textY = restartButtonBounds.y + restartButtonBounds.height + 50; // Adjust the vertical position
+
+        g2.setColor(Color.BLACK);
+        g2.drawString(highScoreText, textX - 4, textY); // Draw the outline to the left
+        g2.drawString(highScoreText, textX + 4, textY); // Draw the outline to the right
+        g2.drawString(highScoreText, textX, textY - 4); // Draw the outline above
+        g2.drawString(highScoreText, textX, textY + 4); // Draw the outline below
+
+        // Draw the white text on top
+        g2.setColor(Color.WHITE);
         g2.drawString(highScoreText, textX, textY);
     }
+
 }
