@@ -1,5 +1,5 @@
 # 2Dodge
-Embark on a scholarly adventure in 2dodge, where players take on the role of a student with omnidirectional movement. Your mission? Collect A's from the floor to score points, all while skillfully dodging the dreaded F's, managing sleep levels, and grabbing essential sustenance. Navigate through the challenges of academia, showcase your reflexes, and strive for academic excellence in this engaging 2D game. Are you ready to ace the obstacles?
+Embark on a scholarly adventure in 2dodge, where players take on the role of a student with omnidirectional movement. Your mission? Collect A's from the floor to score points, all while skillfully dodging the dreaded F's, managing sleep levels, and grabbing essential sustenance.  Navigate through the challenges of academia, showcase your reflexes, and strive for academic excellence in this engaging 2D game. Are you ready to ace the obstacles?
 
 
 TODO:  
